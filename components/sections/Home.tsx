@@ -1,38 +1,18 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { motion, useReducedMotion, type Variants } from "motion/react";
 import { useTheme } from "next-themes";
 
 import HalftoneReveal from "@/components/HalftoneReveal";
-import SplitText from "@/components/SplitText";
+import AnimatedContent from "@/components/ui/AnimatedContent";
+import TechText from "@/components/ui/TechText";
 import { cn } from "cn";
 
 const subscribe = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
-const container: Variants = {
-  hidden: {},
-  show: {
-    transition: {
-      delayChildren: 0.1,
-      staggerChildren: 0.12,
-    },
-  },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
-  },
-};
-
 export function Home() {
-  const reduceMotion = useReducedMotion();
   const { resolvedTheme } = useTheme();
   const mounted = useSyncExternalStore(
     subscribe,
@@ -40,77 +20,94 @@ export function Home() {
     getServerSnapshot,
   );
   const isDark = resolvedTheme === "dark";
+  const accent = isDark ? "#a855f7" : "#7e22ce";
 
   return (
     <section
       id="home"
       aria-labelledby="hero-heading"
-      className="relative z-10 flex min-h-screen scroll-mt-24 items-center px-6 py-16 text-left sm:px-8 lg:py-10 lg:pl-[calc(var(--sidebar-width)+3rem)] lg:pr-12 xl:pl-[350px]"
+      className="relative z-10 flex min-h-screen min-h-dvh scroll-mt-24 items-center overflow-x-clip px-6 py-24 text-left sm:px-8 lg:py-10 lg:pl-12 lg:pr-[clamp(2rem,6vw,6rem)] xl:pl-[calc(var(--sidebar-width)+2rem)]"
     >
-      <div className="mx-auto grid w-full max-w-[100rem] grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,40.625rem)_minmax(0,1fr)] lg:gap-12">
-        <motion.div
-          className="relative z-10"
-          variants={container}
-          initial={reduceMotion ? false : "hidden"}
-          animate="show"
+      <div className="mx-auto grid w-full max-w-[100rem] grid-cols-1 items-center gap-10 lg:-translate-y-14 lg:grid-cols-[minmax(0,6fr)_auto_minmax(0,0.5fr)] lg:gap-12 xl:gap-16">
+        <AnimatedContent
+          trigger="mount"
+          distance={60}
+          duration={0.8}
+          ease="power3.out"
+          stagger={0.12}
+          className="w-full"
         >
-          <motion.div variants={item}>
-            <SplitText
-              id="hero-heading"
-              tag="h1"
+          <h1
+            id="hero-heading"
+            className="relative -ml-[5%] h-[clamp(5.5rem,10vw,8rem)] w-full max-w-[50rem]"
+          >
+            <TechText
               text="Melvin Maquilan"
-              trigger="load"
-              delay={0.15}
-              duration={0.9}
-              stagger={0.035}
-              className="text-5xl font-bold leading-[1.12] tracking-tight text-foreground sm:text-6xl lg:text-7xl lg:whitespace-nowrap"
+              align="left"
+              fontWeight={700}
+              fontSize={88}
+              color={isDark ? "#ededed" : "#171717"}
+              accentColor={accent}
+              fontFamily="Arial, Helvetica, sans-serif"
+              reveal="letter"
+              specks={8}
+              sweep={false}
+              draggable={false}
+              clickKick={false}
             />
-          </motion.div>
+          </h1>
 
-          <motion.p
-            variants={item}
-            className="mt-10 max-w-[650px] text-lg leading-relaxed text-muted-foreground sm:text-xl"
-          >
+          <p className="mt-6 max-w-[650px] text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {
-              "I'm a full-stack developer studying Computer Science. I build web and mobile apps, and lately I've been exploring [AI / cloud / whatever you're into]."
+              "I'm a full-stack developer studying Computer Science. I build web and mobile apps, and lately I've been exploring AI and cloud technologies."
             }
-          </motion.p>
+          </p>
 
-          <motion.p
-            variants={item}
-            className="mt-4 max-w-[650px] text-lg leading-relaxed text-muted-foreground sm:text-xl"
-          >
+          <p className="mt-4 max-w-[650px] text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {
               "I'm always working on something new. I love turning ideas into real products, one build at a time."
             }
-          </motion.p>
-        </motion.div>
+          </p>
+        </AnimatedContent>
 
-        <div className="pointer-events-auto absolute right-6 top-6 z-0 w-auto max-w-[42vw] lg:right-12 lg:top-6">
+        <AnimatedContent
+          trigger="mount"
+          distance={60}
+          duration={0.8}
+          ease="power3.out"
+          className="w-full lg:w-auto"
+        >
           <div
             role="img"
             aria-label="Portrait of Melvin Maquilan"
             className={cn(
-              "relative aspect-[463/395] h-[90vh] w-auto max-w-full transition-opacity duration-500",
+              "relative mx-auto aspect-[145/277] h-[clamp(17rem,58vw,26rem)] w-auto max-w-full transition-opacity duration-500 lg:mx-0 lg:translate-y-[50px] lg:h-[clamp(33.5rem,calc(46vh+6vw+7.5rem),49.5rem)]",
               mounted ? "opacity-100" : "opacity-0",
             )}
           >
-            {mounted && (
-              <HalftoneReveal
-                src="/images/owner/me-trimmed.png"
-                fit="contain"
-                cellSize={5}
-                revealRadius={45}
-                wander={false}
-                clickBurst={false}
-                inkColor={isDark ? "#ededed" : "#171717"}
-                paperColor={isDark ? "#0a0a0a" : "#fafafa"}
-                accentColor={isDark ? "#a855f7" : "#7e22ce"}
-              />
-            )}
+            {/* The source PNG has a large transparent canvas. This crops to the
+                person's alpha bounds so the portrait keeps no empty box, while
+                the page-level glyph background still shows around the cutout. */}
+            <div className="absolute -left-[119.31%] -top-[42.599%] h-[142.599%] w-[319.31%]">
+              {mounted && (
+                <HalftoneReveal
+                  src="/images/owner/me-trimmed.png"
+                  fit="contain"
+                  cellSize={5}
+                  revealRadius={45}
+                  wander={false}
+                  clickBurst={false}
+                  inkColor={isDark ? "#ededed" : "#171717"}
+                  paperColor={isDark ? "#0a0a0a" : "#fafafa"}
+                  accentColor={accent}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </AnimatedContent>
       </div>
     </section>
   );
 }
+
+

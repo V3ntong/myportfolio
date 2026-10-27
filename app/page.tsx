@@ -1,4 +1,5 @@
 import { PageBackground } from "@/components/backgrounds/page-background";
+import { ScrollBlur } from "@/components/ScrollBlur";
 import { SidebarNav } from "@/components/SidebarNav";
 import { About } from "@/components/sections/About";
 import { Certifications } from "@/components/sections/Certifications";
@@ -24,6 +25,7 @@ export default function Page() {
         <Certifications />
         <Contact />
       </div>
+      <ScrollBlur />
     </main>
   );
 }

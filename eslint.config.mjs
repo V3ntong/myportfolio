@@ -5,6 +5,14 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    // Provided upstream component. Kept verbatim, so its upstream render-time
+    // ref write is exempted here rather than modifying the component internals.
+    files: ["components/ui/AnimatedContent.tsx"],
+    rules: {
+      "react-hooks/refs": "off",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

@@ -16,7 +16,6 @@ export interface LineSidebarProps {
   accentColor?: string;
   textColor?: string;
   markerColor?: string;
-  showIndex?: boolean;
   showMarker?: boolean;
   proximityRadius?: number;
   maxShift?: number;
@@ -57,7 +56,6 @@ const LineSidebar = ({
   accentColor = 'var(--accent)',
   textColor = 'var(--sidebar-text)',
   markerColor = 'var(--sidebar-marker)',
-  showIndex = true,
   showMarker = true,
   proximityRadius = 100,
   maxShift = 30,
@@ -219,7 +217,7 @@ const LineSidebar = ({
       >
         {items.map((label, index) => (
           <li
-            key={`${label}-${index}`}
+            key={label}
             ref={el => {
               itemRefs.current[index] = el;
             }}
@@ -234,12 +232,7 @@ const LineSidebar = ({
               />
             )}
             <span className="relative inline-flex items-baseline leading-[1.2] [color:color-mix(in_srgb,var(--accent-color)_calc(var(--effect,0)*100%),var(--text-color))] [font-size:var(--font-size)] [transform:translateX(calc(var(--effect,0)*var(--max-shift)))]">
-              {showIndex && (
-                <span className="mr-[0.6rem] font-mono text-[0.85em] [opacity:calc(0.55+var(--effect,0)*0.45)]">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-              )}
-              <span>{label}</span>
+              {label}
             </span>
           </li>
         ))}

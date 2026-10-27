@@ -1,14 +1,34 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { flushSync } from "react-dom";
 import { useTheme } from "next-themes";
 
 const subscribe = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
+const nextFrame = () =>
+  new Promise<void>((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+
+    // rAF is paused while the View Transition update callback is pending in
+    // Chromium, so race it with a short timer to avoid a deadlock. The queued
+    // frame callback still runs before the new snapshot is captured.
+    requestAnimationFrame(finish);
+    window.setTimeout(finish, 16);
+  });
+
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const fallbackTimer = useRef<number | null>(null);
+const isToggling = useRef(false);
   const mounted = useSyncExternalStore(
     subscribe,
     getClientSnapshot,
@@ -22,12 +42,82 @@ export function ThemeToggle() {
       ? "Switch to light mode"
       : "Switch to dark mode";
 
+  useEffect(
+    () => () => {
+      if (fallbackTimer.current !== null) {
+        window.clearTimeout(fallbackTimer.current);
+      }
+      document.documentElement.classList.remove("theme-transition");
+    },
+    [],
+  );
+
+  const toggleTheme = async () => {
+    if (isToggling.current) return;
+    isToggling.current = true;
+    const nextTheme = isDark ? "light" : "dark";
+    const root = document.documentElement;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const applyTheme = () => {
+      flushSync(() => setTheme(nextTheme));
+      root.classList.remove("light", "dark");
+      root.classList.add(nextTheme);
+      root.style.colorScheme = nextTheme;
+    };
+
+    // Instant swap for reduced motion or unsupported browsers (no CSS transition).
+    if (reduceMotion || typeof document.startViewTransition !== "function") {
+      applyTheme();
+      isToggling.current = false;
+      return;
+    }
+
+    const rect = buttonRef.current?.getBoundingClientRect();
+    const x = rect ? rect.left + rect.width / 2 : window.innerWidth - 40;
+    const y = rect ? rect.top + rect.height / 2 : 40;
+    const radius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    root.style.setProperty("--theme-x", `${x}px`);
+    root.style.setProperty("--theme-y", `${y}px`);
+    root.style.setProperty("--theme-radius", `${radius}px`);
+
+    root.classList.add("theme-vt");
+    const endTransition = () => {
+      root.classList.remove("theme-vt");
+      isToggling.current = false;
+    };
+
+    let transition: ViewTransition;
+    try {
+      transition = document.startViewTransition(async () => {
+        applyTheme();
+        await nextFrame();
+        await nextFrame();
+        if (document.fonts) await document.fonts.ready;
+      });
+    } catch {
+      endTransition();
+      return;
+    }
+
+    void transition.finished.then(endTransition, endTransition);
+  };
+
   return (
     <button
+      ref={buttonRef}
       type="button"
       aria-label={label}
       title={label}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={() => {
+        void toggleTheme();
+      }}
       className="fixed top-4 right-4 z-50 inline-flex size-10 items-center justify-center rounded-full border border-border bg-background/80 text-foreground shadow-sm backdrop-blur transition-colors hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {isDark ? <SunIcon /> : <MoonIcon />}
