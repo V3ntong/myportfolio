@@ -53,6 +53,21 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.clock-colon {
+  animation: clock-blink 2.4s steps(1, end) infinite;
+}
+
+@keyframes clock-blink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0.3;
+  }
+}
+
 @layer base {
   *,
   ::before,
@@ -117,6 +132,10 @@ html.theme-transition *::after {
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) {
+    animation: none !important;
+  }
+
+  .clock-colon {
     animation: none !important;
   }
 }

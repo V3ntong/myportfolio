@@ -1,4 +1,5 @@
 import { PageBackground } from "@/components/backgrounds/page-background";
+import { Clock } from "@/components/Clock";
 import { ScrollBlur } from "@/components/ScrollBlur";
 import { SidebarNav } from "@/components/SidebarNav";
 import { About } from "@/components/sections/About";
@@ -9,6 +10,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Home } from "@/components/sections/Home";
 import { Projects } from "@/components/sections/Projects";
 import { TechStack } from "@/components/sections/TechStack";
+import { AnimatedFooter } from "@/components/ui/AnimatedFooter";
 
 export default function Page() {
   return (
@@ -24,8 +26,12 @@ export default function Page() {
         <Education />
         <Certifications />
         <Contact />
+        <div className="h-[70vh] min-h-[420px]">
+          <AnimatedFooter headingLines={["Melvin works"]} />
+        </div>
       </div>
       <ScrollBlur />
+      <Clock />
     </main>
   );
 }
