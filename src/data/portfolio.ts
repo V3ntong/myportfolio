@@ -1,35 +1,3 @@
-export type TechIconName =
-  | "html"
-  | "css"
-  | "javascript"
-  | "python"
-  | "java"
-  | "cpp"
-  | "php"
-  | "react"
-  | "nextjs"
-  | "typescript"
-  | "tailwind"
-  | "fastapi"
-  | "flask"
-  | "django"
-  | "laravel"
-  | "sqlserver"
-  | "sqlite"
-  | "postgresql"
-  | "mysql"
-  | "firestore"
-  | "flutter"
-  | "firebase"
-  | "supabase"
-  | "git"
-  | "github"
-  | "vscode"
-  | "antigravity"
-  | "androidstudio"
-  | "orca"
-  | "kiro";
-
 export type Profile = {
   name: string;
   role: string;
@@ -82,12 +50,13 @@ export type Project = {
 
 export type TechItem = {
   name: string;
-  icon: TechIconName;
+  icon?: string;
 };
 
 export type TechCategory = {
   name: string;
   items: TechItem[];
+  wide?: boolean;
 };
 
 export type ExperienceEntry = {
@@ -311,63 +280,115 @@ export const projects: Project[] = [
 
 export const techStack: TechCategory[] = [
   {
-    name: "Languages",
-    items: [
-      { name: "HTML", icon: "html" },
-      { name: "CSS", icon: "css" },
-      { name: "JavaScript", icon: "javascript" },
-      { name: "Python", icon: "python" },
-      { name: "Java", icon: "java" },
-      { name: "C++", icon: "cpp" },
-      { name: "PHP", icon: "php" },
-    ],
-  },
-  {
     name: "Frontend",
     items: [
-      { name: "React", icon: "react" },
-      { name: "Next.js", icon: "nextjs" },
-      { name: "TypeScript", icon: "typescript" },
-      { name: "Tailwind CSS", icon: "tailwind" },
+      { name: "React", icon: "/icons/react_light.svg" },
+      { name: "Next.js", icon: "/icons/nextjs_icon_dark.svg" },
+      { name: "TypeScript", icon: "/icons/typescript.svg" },
+      { name: "Tailwind CSS", icon: "/icons/tailwindcss.svg" },
     ],
   },
   {
     name: "Backend",
     items: [
-      { name: "FastAPI", icon: "fastapi" },
-      { name: "Flask", icon: "flask" },
-      { name: "Django", icon: "django" },
-      { name: "Laravel", icon: "laravel" },
+      { name: "FastAPI", icon: "/icons/fastapi.svg" },
+      { name: "Flask", icon: "/icons/flask-light.svg" },
+      { name: "Django", icon: "/icons/django.svg" },
+      { name: "Laravel", icon: "/icons/laravel.svg" },
     ],
   },
   {
     name: "Database",
     items: [
-      { name: "SQL Server", icon: "sqlserver" },
-      { name: "SQLite", icon: "sqlite" },
-      { name: "PostgreSQL", icon: "postgresql" },
-      { name: "MySQL", icon: "mysql" },
-      { name: "Firestore", icon: "firestore" },
+      { name: "SQL Server", icon: "/icons/sql-server.svg" },
+      { name: "SQLite", icon: "/icons/sqlite.svg" },
+      { name: "PostgreSQL", icon: "/icons/postgresql.svg" },
+      { name: "MySQL", icon: "/icons/mysql-icon-light.svg" },
+      { name: "Firestore", icon: "/icons/firebase.svg" },
+      { name: "Supabase", icon: "/icons/supabase.svg" },
     ],
   },
   {
-    name: "Mobile & Cloud",
+    name: "DevOps & Cloud",
     items: [
-      { name: "Flutter", icon: "flutter" },
-      { name: "Firebase", icon: "firebase" },
-      { name: "Supabase", icon: "supabase" },
+      { name: "AWS" },
+      { name: "GCP" },
+      { name: "Azure" },
+      { name: "GitHub Actions" },
+      { name: "Jenkins" },
+      { name: "GitLab CI" },
+      { name: "Terraform" },
+      { name: "AWS CloudFormation" },
+      { name: "Docker" },
+      { name: "Kubernetes" },
+      { name: "Prometheus" },
+      { name: "Grafana" },
+      { name: "Datadog" },
     ],
   },
   {
-    name: "Tools",
+    name: "AI & Machine Learning",
     items: [
-      { name: "Git", icon: "git" },
-      { name: "GitHub", icon: "github" },
-      { name: "VS Code", icon: "vscode" },
-      { name: "Antigravity", icon: "antigravity" },
-      { name: "Android Studio", icon: "androidstudio" },
-      { name: "Orca", icon: "orca" },
-      { name: "Kiro", icon: "kiro" },
+      { name: "TensorFlow" },
+      { name: "PyTorch" },
+      { name: "LangChain" },
+      { name: "Transformers" },
+      { name: "OpenAI" },
+      { name: "Anthropic" },
+      { name: "Mistral" },
+      { name: "Hugging Face" },
+      { name: "LlamaIndex" },
+      { name: "AutoGPT" },
+      { name: "Claude Code" },
+      { name: "Codex" },
+    ],
+  },
+  {
+    name: "Security & Identity",
+    items: [
+      { name: "AWS IAM" },
+      { name: "Azure AD" },
+      { name: "Okta" },
+      { name: "SAP CDC" },
+      { name: "Auth0" },
+      { name: "Cognito" },
+      { name: "AES" },
+      { name: "RSA" },
+      { name: "SHA" },
+      { name: "GDPR" },
+      { name: "SOC 2" },
+      { name: "ISO 27001" },
+    ],
+  },
+  {
+    name: "CMS & No-Code",
+    items: [
+      { name: "WordPress" },
+      { name: "Strapi" },
+      { name: "Bubble" },
+      { name: "Webflow" },
+      { name: "Microsoft Power Platform" },
+      { name: "n8n" },
+    ],
+  },
+  {
+    name: "Developer Tools",
+    wide: true,
+    items: [
+      { name: "Git", icon: "/icons/git.svg" },
+      { name: "GitHub", icon: "/icons/github_light.svg" },
+      { name: "GitLab" },
+      { name: "Bitbucket" },
+      { name: "VS Code", icon: "/icons/vscode.svg" },
+      { name: "Antigravity", icon: "/icons/antigravity.svg" },
+      { name: "JetBrains IntelliJ" },
+      { name: "PyCharm" },
+      { name: "Slack" },
+      { name: "Discord" },
+      { name: "Teams" },
+      { name: "JIRA" },
+      { name: "Trello" },
+      { name: "ClickUp" },
     ],
   },
 ];

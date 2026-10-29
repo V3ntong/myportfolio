@@ -12,6 +12,7 @@ type MagicBentoProps = {
   className?: string;
   contentClassName?: string;
   title?: string;
+  titleClassName?: string;
   description?: string;
   index?: number;
   delay?: number;
@@ -22,6 +23,7 @@ export function MagicBento({
   className,
   contentClassName,
   title,
+  titleClassName,
   description,
   index = 0,
   delay,
@@ -82,7 +84,12 @@ export function MagicBento({
       />
       <div className={cn("relative z-10 flex min-h-0 flex-col", contentClassName)}>
         {title ? (
-          <h3 className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+          <h3
+            className={cn(
+              "text-xs font-semibold tracking-[0.2em] text-accent uppercase",
+              titleClassName,
+            )}
+          >
             <TextAnimation text={title} display="inline-block" delay={textDelay} />
           </h3>
         ) : null}
