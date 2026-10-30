@@ -3,8 +3,8 @@
 **Project:** Melvin Maquilan — Developer Portfolio
 **Repository:** https://github.com/V3ntong/myportfolio.git
 **Branch:** main
-**Last updated:** 2026-10-27
-**Overall status:** In active development — scaffold and core UI complete; content sections are placeholders.
+**Last updated:** 2026-10-29
+**Overall status:** Core build complete — all sections, animations, theme, navigation, contact form, clock, and footer are implemented. The Tech Stack now uses local SVG logos and viewport-scaled sizing that fits one screen at 1920×1080, 1536×864, and 1366×768. Real content, project links, social URLs, and the footer hand images are still placeholders.
 
 This document tracks what is done, what is in progress, what is planned, and what information is still needed from the developer. It follows the 9-step process defined in `Developer Portfolio Blueprint.docx`.
 
@@ -12,13 +12,17 @@ This document tracks what is done, what is in progress, what is planned, and wha
 
 ## 1. Current State Summary
 
-The Next.js 16 application is scaffolded and runs. The visual shell (layout, theme, navigation, hero with halftone portrait, scroll blur) is implemented. All secondary content sections (`About`, `Projects`, `Tech Stack`, `Experience`, `Education`, `Certifications`, `Contact`) currently render **placeholder** content and must be replaced with real data before launch.
+The portfolio is a Next.js 16 single-page site with eight navigable sections plus an animated footer. The visual shell, theme system, navigation, halftone hero, section layouts, contact form, and all requested interaction polish are implemented.
+
+All copy and data now live in the typed content file `myportfolio/src/data/portfolio.ts`. Sections render real layouts instead of placeholder blocks, but most personal details, project URLs, and social URLs still contain `[REPLACE]` values.
+
+The development server is running at `http://localhost:3000` via `npm run dev`.
 
 ### What works today
 
-- App Router single-page site composing 8 sections
+- App Router single-page site composing Home, About, Projects, Tech Stack, Experience, Education, Certifications, Contact, and a footer
 - Responsive navigation: desktop fixed sidebar (`LineSidebar`) + mobile drawer with overlay
-- Active section tracking via `IntersectionObserver`
+- Active section tracking via `IntersectionObserver`; footer is intentionally excluded from the nav
 - Smooth scroll to section (reduced-motion aware)
 - Light/dark theme via `next-themes`, with system preference support
 - Theme toggle with View Transitions API circular reveal (fallback for unsupported browsers / reduced motion)
@@ -27,32 +31,146 @@ The Next.js 16 application is scaffolded and runs. The visual shell (layout, the
 - Scroll-driven bottom `GradualBlur`
 - Design tokens (CSS variables) for light and dark themes
 - Tailwind CSS 4 with custom variant for dark mode
+- Projects section rebuilt as a one-viewport 2×2 bento grid at `1366×768`
+- Tech Stack rebuilt as 8 categories / 71 items with 18 local SVG logos, sized with `clamp()` variables to fit one screen at `1920×1080`, `1536×864`, and `1366×768`
+- Tech Stack grid: 3 columns / 3 rows on desktop, Developer Tools spanning 2 columns; 2 columns on tablet, 1 column on mobile
+- `MagicBento` cards with spotlight, subtle tilt, hover border/shadow, and card text delays
+- `TextAnimation` word entrance animation on section headers and bento card text
+- Contact section uses seven `SocialFlipButton` tiles spelling `C-O-N-T-A-C-T`
+- Manila time clock fixed bottom-left, with rolling `Counter` digits and Tagum City map link
+- Animated footer with ASCII-art hand canvases and hoverable heading characters
+- Validated contact form + `/api/contact` route with error/success handling
+- `.env.example` documents the contact form environment variables
 
 ### Known limitations / placeholders
 
-- `About`, `Projects`, `TechStack`, `Experience`, `Education`, `Certifications`, `Contact` are placeholder blocks (dashed border + "Replace this block…" text)
-- No real project data, GitHub/live links, or case studies yet
+- Personal details, project links, and several social URLs still use `[REPLACE]` values
+- Project GitHub/live URLs are still `#`
+- `public/animated-footer/hand-left.jpg` and `hand-right.jpg` are 64×64 white placeholder JPEGs; replace them with real hand images for visible ASCII art
+- Many Tech Stack items (DevOps, AI, Security, CMS, and several developer tools) are text-only chips; add logos only if desired
+- Contact email delivery depends on environment variables; without them the form shows a direct-email fallback
+- Tech Stack logos use plain `<img>` for local SVGs, which produces one expected `@next/next/no-img-element` lint warning
 - No résumé download
 - No SEO metadata beyond basic `title`/`description` in `myportfolio/app/layout.tsx`
-- No contact form, analytics, or project filtering
-- No tests (unit, e2e, accessibility, performance)
+- No automated tests (unit, e2e, accessibility, performance)
 - No CI/CD pipeline
-- `build.log` and `cdp-*` debug scripts present in repo (housekeeping)
-- `myportfolio/AGENTS.md` is auto-generated by Next.js dev server
+- `build.log` and `cdp-*.mjs` debug scripts remain in the repository (housekeeping)
+- `myportfolio/AGENTS.md` is auto-generated by the Next.js dev server
 
 ---
 
-## 2. Milestone Tracker
+## 2. Completed Work (Most Recent Iteration)
 
-| # | Milestone | Depends on | Acceptance criteria | Status |
-|---|---|---|---|---|
-| 1 | Discovery and Planning | Developer answers to open questions | Scope and audience approved | In progress |
-| 2 | Information Architecture | Milestone 1 | Structure approved; every section has a purpose | Partially done (section map exists) |
-| 3 | UI/UX Design | Milestone 2 | Design direction approved; layouts cover desktop, tablet, mobile | In progress (visual identity in code) |
-| 4 | Core Development | Milestone 3 | All sections render with real content; no placeholder text | Not started (placeholders remain) |
-| 5 | Functionality | Milestone 4 | Each approved feature works and handles errors gracefully | Not started |
-| 6 | Testing and Optimization | Milestone 5 | Responsiveness, a11y, layout, performance, nav, interaction, security checks pass | Not started |
-| 7 | Deployment | Milestone 6 | Production site verified; maintenance documented | Not started |
+### Projects
+
+- Replaced the old scrolling project grid with a full-height flex layout
+- Desktop layout: `h-dvh`, flex column, `grid flex-1 min-h-0 grid-cols-2 grid-rows-2`
+- Each card uses `MagicBento`
+- Screenshot placeholder area uses `flex-1 min-h-0`
+- Card title, description, and role line use `TextAnimation`
+- Card text delays are offset from `0.2 + index * 0.08`
+- Description uses `line-clamp-2` on a block containing inline animated words
+- Added compact desktop-only scroll margin so a nav click shows the full section at `1366×768`
+- Changed files: `myportfolio/components/sections/Projects.tsx`
+
+### Tech Stack
+
+- Final categories and item counts (71 items total):
+  - Frontend: React, Next.js, TypeScript, Tailwind CSS (4)
+  - Backend: FastAPI, Flask, Django, Laravel (4)
+  - Database: SQL Server, SQLite, PostgreSQL, MySQL, Firestore, Supabase (6)
+  - DevOps & Cloud: AWS, GCP, Azure, GitHub Actions, Jenkins, GitLab CI, Terraform, AWS CloudFormation, Docker, Kubernetes, Prometheus, Grafana, Datadog (13)
+  - AI & Machine Learning: TensorFlow, PyTorch, LangChain, Transformers, OpenAI, Anthropic, Mistral, Hugging Face, LlamaIndex, AutoGPT, Claude Code, Codex (12)
+  - Security & Identity: AWS IAM, Azure AD, Okta, SAP CDC, Auth0, Cognito, AES, RSA, SHA, GDPR, SOC 2, ISO 27001 (12)
+  - CMS & No-Code: WordPress, Strapi, Bubble, Webflow, Microsoft Power Platform, n8n (6)
+  - Developer Tools: Git, GitHub, GitLab, Bitbucket, VS Code, Antigravity, JetBrains IntelliJ, PyCharm, Slack, Discord, Teams, JIRA, Trello, ClickUp (14, spans 2 columns)
+- Added 18 local SVG logos under `public/icons/`; chips without artwork render text-only
+- Dark-mode inversion applied only to light monochrome logos (Flask, GitHub, MySQL)
+- Removed the `TechIcon` component and `react-icons` mapping from this section
+- Rebuilt as a 3-column / 3-row bento grid on desktop; 2 columns on tablet, 1 column on mobile
+- Added `titleClassName` to `MagicBento` so card headings can use the scaled font size
+- Card padding, grid/list gaps, heading size, chip font/padding, and icon size are driven by scoped CSS `clamp()` variables, tuned so the section fits one viewport at 1920×1080, 1536×864, and 1366×768 without clipping
+- Changed files:
+  - `myportfolio/components/sections/TechStack.tsx`
+  - `myportfolio/components/ui/MagicBento.tsx`
+  - `myportfolio/src/data/portfolio.ts`
+  - `myportfolio/public/icons/` (new SVGs)
+  - `myportfolio/components/ui/TechIcon.tsx` (removed)
+
+### Section headers
+
+- `SectionHeading` now animates eyebrow, title, and description with `TextAnimation`
+- Delays: eyebrow `0`, title `0.1`, description `0.25`
+- Added a `compact` variant for single-viewport sections
+- Changed file: `myportfolio/components/ui/SectionHeading.tsx`
+
+### New shared UI
+
+- `TextAnimation`: word/character mode, reduced-motion aware, descender-safe padding, inline mode for line-clamped text
+- `MagicBento`: spotlight, pointer tilt, reduced-motion handling, optional animated title/description
+- `Counter`: rolling digit animation with reduced-motion fallback
+- `SocialFlipButton`: hover, touch, and keyboard flip behavior with 3D faces and tooltips
+- `AnimatedFooter`: ASCII hand canvases, theme-aware canvas colors, reveal observer, hoverable heading characters
+- `Clock`: Asia/Manila time, aligned minute updates, SSR placeholder, map link
+- Changed/created files:
+  - `myportfolio/components/ui/TextAnimation.tsx`
+  - `myportfolio/components/ui/MagicBento.tsx`
+  - `myportfolio/components/ui/Counter.tsx`
+  - `myportfolio/components/ui/SocialFlipButton.tsx`
+  - `myportfolio/components/ui/AnimatedFooter.tsx`
+  - `myportfolio/components/Clock.tsx`
+
+### Contact
+
+- Replaced the three contact cards with seven `SocialFlipButton` tiles
+- Letters spell `C-O-N-T-A-C-T`
+- Default icon order: GitHub, X/Twitter, LinkedIn, Instagram, Facebook, Email, Discord
+- Placeholder links:
+  - Email: `mailto:you@example.com` (no `target="_blank"`)
+  - GitHub: `https://github.com/your-handle`
+  - LinkedIn: `https://linkedin.com/in/your-handle`
+  - X/Twitter, Instagram, Facebook, Discord: `[REPLACE]` URLs
+- No contact link uses `#`
+- Contact line and description use `TextAnimation`; line delay is `0.4`
+- Changed files:
+  - `myportfolio/components/sections/Contact.tsx`
+  - `myportfolio/src/data/portfolio.ts`
+
+### Clock
+
+- Fixed bottom-left, hidden below `640px` width or below `700px` height
+- Uses `Asia/Manila`
+- `USE_24_HOUR = false`, so the clock shows a day period
+- Displays `Tagum City, Philippines · Asia/Manila`
+- Links to `https://www.google.com/maps/search/?api=1&query=Tagum+City+Philippines`
+- No time is rendered during SSR; a placeholder avoids hydration mismatch
+- Added `.clock-colon` blink animation with reduced-motion override
+- Changed files:
+  - `myportfolio/components/Clock.tsx`
+  - `myportfolio/app/globals.css`
+
+### Footer
+
+- Added after Contact with a parent height of `h-[70vh] min-h-[420px]`
+- Heading is `Melvin works`
+- Heading characters transition to the page background color with an accent background on hover
+- ASCII canvases sample the two hand images, skip light pixels, and keep the center clear for the heading
+- Theme changes trigger a redraw
+- Missing images fail gracefully
+- Footer is not a nav item and Contact remains the active nav item when the footer is in view
+- Created placeholder files:
+  - `myportfolio/public/animated-footer/hand-left.jpg`
+  - `myportfolio/public/animated-footer/hand-right.jpg`
+- Changed files:
+  - `myportfolio/components/ui/AnimatedFooter.tsx`
+  - `myportfolio/app/page.tsx`
+  - `myportfolio/app/globals.css`
+
+### Dependencies
+
+- Added `react-icons`
+- Continued using the already-installed `motion` package via `motion/react`
+- Did not add `framer-motion`
 
 ---
 
@@ -60,102 +178,156 @@ The Next.js 16 application is scaffolded and runs. The visual shell (layout, the
 
 | Section | Route/ID | Status | Notes |
 |---|---|---|---|
-| Home (Hero) | `#home` | Done | Name, intro, halftone portrait, CTAs TBD |
-| About | `#about` | Placeholder | Needs real bio, philosophy, specialization, goals |
-| Projects | `#projects` | Placeholder | Needs 3–5 featured projects with case studies |
-| Tech Stack | `#tech-stack` | Placeholder | Needs grouped skills with honest comfort levels |
-| Experience | `#experience` | Placeholder | Needs work/internship/academic entries |
-| Education | `#education` | Placeholder | Needs degree/program details |
-| Certifications | `#certifications` | Placeholder | Needs cert list |
-| Contact | `#contact` | Placeholder | Needs contact methods + professional links |
+| Home (Hero) | `#home` | Done | Name, intro, halftone portrait, CTAs |
+| About | `#about` | Implemented | Placeholder bio and quick facts remain |
+| Projects | `#projects` | Implemented | 2×2 bento grid, one viewport at 1366×768; project URLs still `#` |
+| Tech Stack | `#tech-stack` | Done | 8 categories / 71 items, 18 local SVG logos, 3-row bento grid; fits 1920×1080 / 1536×864 / 1366×768 |
+| Experience | `#experience` | Implemented | Placeholder role/company details remain |
+| Education | `#education` | Implemented | Placeholder degree/school details remain |
+| Certifications | `#certifications` | Implemented | Placeholder certificate details remain |
+| Contact | `#contact` | Implemented | Social flip tiles + working contact form; real URLs/email pending |
+| Footer | `#footer-heading` | Implemented | ASCII art pending real hand images |
 
 ---
 
 ## 4. Feature Status
----
-
-## 6. Open Questions / Information Needed From Developer
-
-These cannot be invented and will shape the whole portfolio (per blueprint):
-
-- [ ] Name, professional title, specialization (currently "Melvin Maquilan | Full-Stack Developer")
-- [ ] Main goal and audience (job search, freelance clients, or both)
-- [ ] The 3–5 projects to feature, with repository and live links
-- [ ] Technologies actually used and honest comfort level with each
-- [ ] Work, internship, academic, certification, or competition experience
-- [ ] Résumé file and preferred contact methods / professional profiles (GitHub, LinkedIn, email)
-- [ ] Design preferences or example sites that appeal
-- [ ] Existing domain or hosting, and target timeline
-
----
-
-## 7. Content Honesty Rules
-
-- Do not fabricate users, performance metrics, business results, testimonials, or achievements.
-- Clearly separate completed features from planned features.
-- Describe the developer's own contribution accurately, especially on team projects.
-- Never claim code, tests, or deployment are complete unless they actually were performed.
-
----
-
-## 8. Known Risks & Assumptions
-
-- Content sections are placeholders; shipping as-is would present an incomplete portfolio.
-- No tests or CI exist yet — regressions possible during content integration.
-- `myportfolio/next.config.ts` enables experimental features (`cacheComponents`, `partialPrefetching`, `agentFeedback`) — verify against Next.js 16 docs before production.
-- WebGL halftone effect may not render on low-end devices; ensure graceful fallback.
-- `cn` package (not `clsx`/`tailwind-merge`) is used — verify import path resolves in all environments.
-
----
-
-## 9. Next Steps (Recommended Order)
-
-1. Gather the missing developer information (Section 6).
-2. Replace placeholder sections with real content, starting with `About` and `Projects`.
-3. Add project cards + case study template (per blueprint case study template).
-4. Add résumé download link and SEO metadata/Open Graph.
-5. Decide on contact form vs. direct links.
-6. Run accessibility, performance, responsiveness, and cross-browser checks.
-7. Set up CI (build + lint on push).
-8. Deploy to Vercel and verify production.
-
----
-
-## 10. Files of Note
-
-| File | Purpose |
-|---|---|
-| `README.md` | Project overview, setup, tech stack |
-| `myportfolio/AGENTS.md` | Next.js 16 agent rules (auto-generated) |
-| `Developer Portfolio Blueprint.docx` | Source planning guide (repo root) |
-| `myportfolio/build.log` | Previous build output (housekeeping) |
-| `myportfolio/cdp-*.mjs` | Debug scripts (housekeeping) |
-
 
 | Feature | Priority | Complexity | Status |
 |---|---|---|---|
 | Responsive navigation | Essential | Low | Done |
-| Interactive project cards | Essential | Low–Medium | Not started |
+| Interactive project cards | Essential | Low–Medium | Done |
 | Detailed case studies | Essential (top projects) | Medium | Not started |
 | Résumé download | Essential | Low | Not started |
 | SEO and metadata | Essential | Low | Partial (basic title/description only) |
-| Loading and error states | Essential | Low | Not started |
+| Loading and error states | Essential | Low | Contact form done |
 | Project filtering | Optional | Medium | Not started |
 | Theme switching | Optional | Low–Medium | Done |
-| Contact form | Optional | Medium | Not started |
+| Contact form | Optional | Medium | Done (requires environment variables for delivery) |
 | GitHub integration | Optional | Medium | Not started |
 | Analytics | Optional | Low | Not started |
 | Accessibility controls | Optional | Low–Medium | Not started |
+| Animated section headers | Requested | Low | Done |
+| MagicBento cards | Requested | Medium | Done |
+| Expanded Tech Stack | Requested | Low | Done |
+| Manila clock | Requested | Low | Done |
+| Animated footer | Requested | Medium | Done (placeholder hand images) |
+| Social flip contact tiles | Requested | Medium | Done |
 
 ---
 
-## 5. Technical Architecture Decisions
+## 5. Verification Performed
 
-- **Approach:** Static-first site. No backend, database, or auth unless a clear need arises.
-- **Frontend:** Next.js 16 (App Router) with React 19 and TypeScript 5.
-- **Styling:** Tailwind CSS 4 + CSS custom properties as design tokens (`--background`, `--foreground`, `--accent`, etc.).
-- **Content:** Currently hardcoded in components; plan is Markdown/JSON files in repo for easy project additions.
-- **Hosting target:** Vercel (static).
-- **Forms:** Third-party service or one serverless function, only if a contact form is approved.
-- **Testing:** Component/unit tests for critical logic + automated a11y/performance checks (not yet set up).
+Run in `myportfolio`:
+
+- `npx tsc --noEmit` — passed
+- `npm run lint` — passed with 0 errors; 14 pre-existing warnings in `cdp-*.mjs` debug scripts plus 1 expected `@next/next/no-img-element` warning in `TechStack.tsx`
+- `npm run build` — passed
+- `npm run dev` — running successfully at `http://localhost:3000`
+
+Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, and `1366×768` in dark and light, plus tablet and mobile:
+
+- Projects section height: `768px`; grid `592px` tall; all four cards `491×288`; no internal clipping
+- Tech Stack at `1920×1080`: section `1080px`; grid `841px`; 8 cards in 3 rows; card padding `25.2px`, heading `15.5px`, chip text `16px`, icons `24px`
+- Tech Stack at `1536×864`: section `864px`; grid `665px`; card padding `20.1px`, heading `13px`, chip text `14.9px`, icons `20.1px`
+- Tech Stack at `1366×768`: section `768px`; grid `602.6px`, 17px spare; card padding `17.9px`, heading `13px`, chip text `13.2px`, icons `18px`
+- Tech Stack: no clipped chips, no horizontal overflow, correct 3/2/1-column layouts, verified dark and light at all three desktop sizes
+- Tech Stack on tablet `820×1100` (2 columns) and mobile `390×844` (1 column): all 8 cards and 71 chips render without overflow
+- Contact: 7 links; zero `#` hrefs; `mailto:` link has no `target`
+- Footer: `538px` tall at 768 viewport; 12 heading characters; not in nav; Contact stays active
+- Clock: visible at 1366×768, hidden at 390×844
+- Mobile `390×844`: no horizontal page overflow; social tiles fit in one row
+- Reduced motion: all text remains visible; motion effects are disabled
+- No browser console errors or warnings were observed
+- Footer ASCII drawing was verified with a temporary test image (then the white placeholders were restored)
+
+---
+
+## 6. Milestone Tracker
+
+| # | Milestone | Depends on | Acceptance criteria | Status |
+|---|---|---|---|---|
+| 1 | Discovery and Planning | Developer answers to open questions | Scope and audience approved | In progress (content questions remain) |
+| 2 | Information Architecture | Milestone 1 | Structure approved; every section has a purpose | Done |
+| 3 | UI/UX Design | Milestone 2 | Design direction approved; layouts cover desktop, tablet, mobile | Done for implemented sections |
+| 4 | Core Development | Milestone 3 | All sections render with real content; no placeholder text | In progress (layouts done, real content pending) |
+| 5 | Functionality | Milestone 4 | Each approved feature works and handles errors gracefully | Partial (contact form and interactions working) |
+| 6 | Testing and Optimization | Milestone 5 | Responsiveness, a11y, layout, performance, nav, interaction, security checks pass | Partial (manual checks done; automated checks pending) |
+| 7 | Deployment | Milestone 6 | Production site verified; maintenance documented | Not started |
+
+---
+
+## 7. Open Questions / Information Needed From Developer
+
+- [ ] Replace remaining `[REPLACE]` personal details, project links, and social URLs
+- [ ] Supply real `hand-left.jpg` and `hand-right.jpg` images (dark/transparent hands work best)
+- [ ] Supply real project GitHub/live URLs instead of `#`
+- [ ] Confirm contact form environment variables and email delivery setup
+- [ ] Provide résumé file and preferred contact methods
+- [ ] Provide final SEO/Open Graph copy and any domain/hosting details
+- [ ] Confirm design preferences and whether additional case-study pages are wanted
+
+---
+
+## 8. Technical Architecture Decisions
+
+- **Approach:** Static-first site. Inline API route only for the contact form.
+- **Frontend:** Next.js 16 (App Router), React 19, TypeScript 5.
+- **Styling:** Tailwind CSS 4 + CSS custom properties as design tokens (`--background`, `--foreground`, `--accent`, `--border`, etc.).
+- **Content:** Typed data in `myportfolio/src/data/portfolio.ts`; no CMS yet.
+- **Animation:**
+  - GSAP for scroll entrances and split text
+  - `motion/react` for `TextAnimation`, `MagicBento`, `Counter`, and social flip behavior
+- **Icons:** Tech Stack uses local SVGs in `public/icons/` (text-only chips where no logo exists); contact tiles use `react-icons/fa6`.
+- **Hosting target:** Vercel (static + serverless contact route).
+- **Testing:** Manual CDP/browser checks for now; automated tests still to be added.
 - **Workflow:** Git + GitHub; CI pipeline to be added.
+
+---
+
+## 9. Known Risks & Assumptions
+
+- Most visible content is still placeholder; shipping as-is would present an incomplete portfolio.
+- Project and social links are placeholders and must be replaced before launch.
+- The footer's ASCII effect is invisible until real hand images replace the white placeholders.
+- No automated tests or CI exist yet; regressions are possible during content integration.
+- Contact delivery depends on environment variables; verify the provider before launch.
+- `myportfolio/next.config.ts` enables experimental features (`cacheComponents`, `partialPrefetching`, `agentFeedback`) — verify against Next.js 16 docs before production.
+- WebGL halftone effect may not render on low-end devices; confirm the fallback.
+- `cn` package (not `clsx`/`tailwind-merge`) is used — verify import path resolves in all environments.
+
+---
+
+## 10. Next Steps (Recommended Order)
+
+1. Replace all `[REPLACE]` content and project/social URLs.
+2. Add real footer hand images and verify ASCII rendering at desktop and mobile sizes.
+3. Configure contact-form environment variables and test delivery end to end.
+4. Add résumé download and SEO/Open Graph metadata.
+5. Run accessibility, performance, responsiveness, and cross-browser checks.
+6. Add automated checks for lint, build, and critical interactions.
+7. Set up CI and deploy to Vercel.
+
+---
+
+## 11. Files of Note
+
+| File | Purpose |
+|---|---|
+| `README.md` | Project overview, setup, tech stack |
+| `DEVELOPMENT_STATUS.md` | This status document |
+| `myportfolio/src/data/portfolio.ts` | Typed portfolio content and social/tech data |
+| `myportfolio/app/page.tsx` | Page composition including footer and clock |
+| `myportfolio/components/ui/TextAnimation.tsx` | Shared text entrance animation |
+| `myportfolio/components/ui/MagicBento.tsx` | Bento card interaction wrapper |
+| `myportfolio/components/ui/Counter.tsx` | Rolling clock digits |
+| `myportfolio/components/ui/SocialFlipButton.tsx` | Contact social tiles |
+| `myportfolio/components/ui/AnimatedFooter.tsx` | ASCII hand footer |
+| `myportfolio/components/Clock.tsx` | Manila time + map link |
+| `myportfolio/components/sections/Projects.tsx` | One-viewport project grid |
+| `myportfolio/components/sections/TechStack.tsx` | 8-category tech bento grid with viewport-scaled sizing |
+| `myportfolio/public/icons/` | 18 local SVG logos used by Tech Stack chips |
+| `myportfolio/public/animated-footer/` | Footer hand images (placeholders currently) |
+| `myportfolio/AGENTS.md` | Next.js 16 agent rules (auto-generated) |
+| `Developer Portfolio Blueprint.docx` | Source planning guide (repo root) |
+| `myportfolio/build.log` | Previous build output (housekeeping) |
+| `myportfolio/cdp-*.mjs` | Debug scripts (housekeeping) |
