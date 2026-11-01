@@ -51,6 +51,7 @@ export type Project = {
 export type TechItem = {
   name: string;
   icon?: string;
+  iconDark?: string;
 };
 
 export type TechCategory = {
@@ -138,7 +139,7 @@ export type ContactContent = {
 
 export const profile: Profile = {
   name: "Melvin Maquilan",
-  role: "Full-Stack Developer",
+  role: "Lead Developer",
   email: "[REPLACE] you@example.com",
   github: "[REPLACE] github.com/your-handle",
   linkedin: "[REPLACE] linkedin.com/in/your-handle",
@@ -175,7 +176,7 @@ export const sections: Record<
     eyebrow: "04 — Experience",
     title: "Where I've worked",
     description:
-      "Freelance builds and team projects where I shipped real features.",
+      "Where I'm starting from, and what I'm ready to take on next.",
   },
   education: {
     eyebrow: "05 — Education",
@@ -210,23 +211,30 @@ export const labels: UiLabels = {
 
 export const aboutContent: AboutContent = {
   paragraphs: [
-    "I'm a full-stack developer currently studying computer science, and I like building things from idea to working product.",
-    "I enjoy the whole process: shaping the idea, designing the interface, wiring up the data, and polishing the details until it feels right. Right now I'm focused on web and mobile apps, with a growing interest in AI and cloud tools.",
+    "I'm a lead developer currently studying computer science, and I like building things from idea to working product.",
+    "I enjoy the whole process: shaping the idea, designing the interface, wiring up the data, and polishing the details until it feels right. Right now I'm focused on web and mobile apps, with a growing interest in AI, ML, and cloud tools.",
   ],
   lookingForTitle: "Currently looking for",
-  lookingFor: ["Internships", "Junior roles", "Freelance work"],
+  lookingFor: [
+    "Internships",
+    "Junior roles",
+    "Freelance work",
+    "Web development",
+    "Web commissions",
+  ],
   quickFacts: [
     {
       label: "Interests",
-      value: "[REPLACE] UI design, AI experiments, and mobile apps",
+      value: "Mobile, web dev, web apps, AI and ML",
     },
     {
       label: "Currently learning",
-      value: "[REPLACE] Cloud deployment and applied AI",
+      value: "DevOps, cloud, and cybersecurity",
     },
     {
       label: "Open to",
-      value: "Internships, junior roles, and freelance work",
+      value:
+        "Internships, junior roles, freelance work, web development, and web commissions",
     },
   ],
 };
@@ -237,7 +245,7 @@ export const projects: Project[] = [
     title: "KAH KEN SHA NEY",
     description:
       "A lost & found mobile app with item reporting, claiming, an admin dashboard, and a chatbot.",
-    role: "[REPLACE] Lead mobile developer",
+    role: "Lead Developer",
     tech: ["Flutter", "Firebase"],
     githubUrl: "#",
     liveUrl: "#",
@@ -248,7 +256,7 @@ export const projects: Project[] = [
     title: "Face Recognition Web App",
     description:
       "Identifies people from a live camera feed, uploaded photos, and video.",
-    role: "[REPLACE] Full-stack developer",
+    role: "Lead Developer",
     tech: ["Python", "SQL Server"],
     githubUrl: "#",
     liveUrl: "#",
@@ -259,7 +267,7 @@ export const projects: Project[] = [
     title: "Student Records System",
     description:
       "Create a database, add students, and view every record in a clean table view.",
-    role: "[REPLACE] Full-stack developer",
+    role: "Lead Developer",
     tech: ["React", "FastAPI", "SQL Server"],
     githubUrl: "#",
     liveUrl: "#",
@@ -270,7 +278,7 @@ export const projects: Project[] = [
     title: "Developer Portfolio",
     description:
       "This site: a single-page portfolio with animated sections and a light/dark theme.",
-    role: "[REPLACE] Designer & developer",
+    role: "Lead Developer",
     tech: ["Next.js", "Tailwind CSS", "GSAP"],
     githubUrl: "#",
     liveUrl: "#",
@@ -303,7 +311,11 @@ export const techStack: TechCategory[] = [
       { name: "SQL Server", icon: "/icons/sql-server.svg" },
       { name: "SQLite", icon: "/icons/sqlite.svg" },
       { name: "PostgreSQL", icon: "/icons/postgresql.svg" },
-      { name: "MySQL", icon: "/icons/mysql-icon-light.svg" },
+      {
+        name: "MySQL",
+        icon: "/icons/mysql-icon-light.svg",
+        iconDark: "/icons/mysql-icon-dark.svg",
+      },
       { name: "Firestore", icon: "/icons/firebase.svg" },
       { name: "Supabase", icon: "/icons/supabase.svg" },
     ],
@@ -311,36 +323,56 @@ export const techStack: TechCategory[] = [
   {
     name: "DevOps & Cloud",
     items: [
-      { name: "AWS" },
-      { name: "GCP" },
-      { name: "Azure" },
+      {
+        name: "AWS",
+        icon: "/icons/aws_light.svg",
+        iconDark: "/icons/aws_dark.svg",
+      },
+      { name: "GCP", icon: "/icons/google-cloud.svg" },
+      { name: "Azure", icon: "/icons/azure.svg" },
       { name: "GitHub Actions" },
       { name: "Jenkins" },
-      { name: "GitLab CI" },
-      { name: "Terraform" },
+      { name: "GitLab CI", icon: "/icons/gitlab.svg" },
+      { name: "Terraform", icon: "/icons/terraform.svg" },
       { name: "AWS CloudFormation" },
-      { name: "Docker" },
-      { name: "Kubernetes" },
+      { name: "Docker", icon: "/icons/docker.svg" },
+      { name: "Kubernetes", icon: "/icons/kubernetes.svg" },
       { name: "Prometheus" },
-      { name: "Grafana" },
-      { name: "Datadog" },
+      { name: "Grafana", icon: "/icons/grafana.svg" },
+      { name: "Datadog", icon: "/icons/datadog.svg" },
     ],
   },
   {
     name: "AI & Machine Learning",
     items: [
-      { name: "TensorFlow" },
+      {
+        name: "TensorFlow",
+        icon: "/icons/tensorflow-icon-light.svg",
+        iconDark: "/icons/tensorflow-icon-dark.svg",
+      },
       { name: "PyTorch" },
-      { name: "LangChain" },
+      { name: "LangChain", icon: "/icons/langchain-logo.svg" },
       { name: "Transformers" },
-      { name: "OpenAI" },
-      { name: "Anthropic" },
-      { name: "Mistral" },
-      { name: "Hugging Face" },
+      {
+        name: "OpenAI",
+        icon: "/icons/openai.svg",
+        iconDark: "/icons/openai_dark.svg",
+      },
+      {
+        name: "Anthropic",
+        icon: "/icons/anthropic_black.svg",
+        iconDark: "/icons/anthropic_white.svg",
+      },
+      { name: "Mistral", icon: "/icons/mistral-ai_logo.svg" },
+      { name: "Hugging Face", icon: "/icons/hugging_face.svg" },
       { name: "LlamaIndex" },
       { name: "AutoGPT" },
-      { name: "Claude Code" },
-      { name: "Codex" },
+      { name: "Claude Code", icon: "/icons/claude-ai-icon.svg" },
+      {
+        name: "Codex",
+        icon: "/icons/codex_light.svg",
+        iconDark: "/icons/codex_dark.svg",
+      },
     ],
   },
   {
@@ -350,7 +382,7 @@ export const techStack: TechCategory[] = [
       { name: "Azure AD" },
       { name: "Okta" },
       { name: "SAP CDC" },
-      { name: "Auth0" },
+      { name: "Auth0", icon: "/icons/auth0.svg" },
       { name: "Cognito" },
       { name: "AES" },
       { name: "RSA" },
@@ -363,12 +395,12 @@ export const techStack: TechCategory[] = [
   {
     name: "CMS & No-Code",
     items: [
-      { name: "WordPress" },
-      { name: "Strapi" },
+      { name: "WordPress", icon: "/icons/wordpress.svg" },
+      { name: "Strapi", icon: "/icons/strapi.svg" },
       { name: "Bubble" },
-      { name: "Webflow" },
+      { name: "Webflow", icon: "/icons/webflow.svg" },
       { name: "Microsoft Power Platform" },
-      { name: "n8n" },
+      { name: "n8n", icon: "/icons/n8n.svg" },
     ],
   },
   {
@@ -377,52 +409,42 @@ export const techStack: TechCategory[] = [
     items: [
       { name: "Git", icon: "/icons/git.svg" },
       { name: "GitHub", icon: "/icons/github_light.svg" },
-      { name: "GitLab" },
+      { name: "GitLab", icon: "/icons/gitlab.svg" },
       { name: "Bitbucket" },
       { name: "VS Code", icon: "/icons/vscode.svg" },
       { name: "Antigravity", icon: "/icons/antigravity.svg" },
-      { name: "JetBrains IntelliJ" },
-      { name: "PyCharm" },
-      { name: "Slack" },
-      { name: "Discord" },
-      { name: "Teams" },
+      { name: "JetBrains IntelliJ", icon: "/icons/intellijidea.svg" },
+      { name: "PyCharm", icon: "/icons/pycharm.svg" },
+      { name: "Slack", icon: "/icons/slack.svg" },
+      { name: "Discord", icon: "/icons/discord.svg" },
+      { name: "Teams", icon: "/icons/microsoft-teams.svg" },
       { name: "JIRA" },
-      { name: "Trello" },
-      { name: "ClickUp" },
+      { name: "Trello", icon: "/icons/trello.svg" },
+      { name: "ClickUp", icon: "/icons/clickup.svg" },
     ],
   },
 ];
 
 export const experience: ExperienceEntry[] = [
   {
-    id: "freelance",
-    role: "[REPLACE] Freelance Web Developer",
-    organization: "[REPLACE] Self-employed",
-    period: "[REPLACE] 2024 — Present",
+    id: "getting-started",
+    role: "Lead Developer",
+    organization: "Open to internships and junior roles",
+    period: "No formal experience yet",
     bullets: [
-      "[REPLACE] Built responsive web interfaces for small clients, from first sketch to deployment.",
-      "[REPLACE] Worked directly with clients to scope features, review progress, and ship on schedule.",
-      "[REPLACE] Used React, Next.js, and Tailwind CSS to keep the codebase consistent and easy to maintain.",
-    ],
-  },
-  {
-    id: "student-projects",
-    role: "[REPLACE] Student Project Developer",
-    organization: "[REPLACE] University / School",
-    period: "[REPLACE] 2023 — 2025",
-    bullets: [
-      "[REPLACE] Collaborated on team projects covering mobile apps, databases, and full-stack web tools.",
-      "[REPLACE] Owned features end to end, including data modeling, UI implementation, and testing.",
+      "I don't have work experience at the moment, but I can assure you I'll make it work.",
+      "The projects on this site are how I've built my skills — every one taken from first idea to working product.",
+      "I learn quickly, communicate clearly, and care about shipping things that actually work.",
     ],
   },
 ];
 
 export const education: EducationEntry = {
-  degree: "[REPLACE] BS Computer Science",
-  school: "[REPLACE] University / School Name",
-  period: "[REPLACE] Expected graduation 20XX",
+  degree: "BS Computer Science",
+  school: "St Mary's College of Tagum Inc.",
+  period: "Expected graduation 2027–2028",
   summary:
-    "[REPLACE] Coursework focused on software engineering, databases, and web development.",
+    "Coursework focused on software engineering, databases, and web development.",
   coursework: [
     "Data Structures",
     "Algorithms",

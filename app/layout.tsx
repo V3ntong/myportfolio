@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Melvin Maquilan | Full-Stack Developer",
+  title: "Melvin Maquilan | Lead Developer",
   description:
-    "Portfolio of Melvin Maquilan, a full-stack developer building web and mobile apps with a focus on thoughtful, accessible interfaces.",
+    "Portfolio of Melvin Maquilan, a lead developer building web and mobile apps with a focus on thoughtful, accessible interfaces.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

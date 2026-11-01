@@ -8,9 +8,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { sections, techStack } from "@/src/data/portfolio";
 
 const DARK_INVERT_ICONS = new Set([
+  "/icons/antigravity.svg",
   "/icons/flask-light.svg",
   "/icons/github_light.svg",
-  "/icons/mysql-icon-light.svg",
 ]);
 
 const TECH_STACK_STYLE = {
@@ -79,8 +79,21 @@ export function TechStack() {
                             height={24}
                             className={cn(
                               "h-[var(--ts-icon-size)] w-[var(--ts-icon-size)] shrink-0 object-contain",
-                              DARK_INVERT_ICONS.has(item.icon) && "dark:invert",
+                              item.iconDark && "dark:hidden",
+                              !item.iconDark &&
+                                DARK_INVERT_ICONS.has(item.icon) &&
+                                "dark:invert",
                             )}
+                          />
+                        ) : null}
+                        {item.iconDark ? (
+                          <img
+                            src={item.iconDark}
+                            alt=""
+                            aria-hidden
+                            width={24}
+                            height={24}
+                            className="hidden h-[var(--ts-icon-size)] w-[var(--ts-icon-size)] shrink-0 object-contain dark:block"
                           />
                         ) : null}
                         {item.name}

@@ -10,7 +10,6 @@ import { Experience } from "@/components/sections/Experience";
 import { Home } from "@/components/sections/Home";
 import { Projects } from "@/components/sections/Projects";
 import { TechStack } from "@/components/sections/TechStack";
-import { AnimatedFooter } from "@/components/ui/AnimatedFooter";
 
 export default function Page() {
   return (
@@ -26,9 +25,6 @@ export default function Page() {
         <Education />
         <Certifications />
         <Contact />
-        <div className="h-[70vh] min-h-[420px]">
-          <AnimatedFooter headingLines={["Melvin works"]} />
-        </div>
       </div>
       <ScrollBlur />
       <Clock />

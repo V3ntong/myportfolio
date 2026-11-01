@@ -59,7 +59,7 @@ export function Home() {
 
           <p className="mt-6 max-w-[650px] text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {
-              "I'm a full-stack developer studying Computer Science. I build web and mobile apps, and lately I've been exploring AI and cloud technologies."
+              "I'm a lead developer studying Computer Science. I build web and mobile apps, and lately I've been exploring AI and cloud technologies."
             }
           </p>
 
