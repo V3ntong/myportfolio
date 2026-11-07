@@ -36,7 +36,7 @@ export function TextAnimation({
   return (
     <Component className={cn(display === "inline" ? "inline" : "inline-block", className)}>
       <motion.span
-        initial={reduceMotion ? false : "hidden"}
+        initial={false}
         whileInView="visible"
         viewport={{ once, amount: 0.3 }}
         variants={{

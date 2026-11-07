@@ -291,6 +291,9 @@ export const techStack: TechCategory[] = [
     name: "Frontend",
     items: [
       { name: "React", icon: "/icons/react_light.svg" },
+      { name: "Vue.js", icon: "/icons/vue.svg" },
+      { name: "Angular", icon: "/icons/angular.svg" },
+      { name: "Svelte", icon: "/icons/svelte.svg" },
       { name: "Next.js", icon: "/icons/nextjs_icon_dark.svg" },
       { name: "TypeScript", icon: "/icons/typescript.svg" },
       { name: "Tailwind CSS", icon: "/icons/tailwindcss.svg" },
@@ -299,6 +302,8 @@ export const techStack: TechCategory[] = [
   {
     name: "Backend",
     items: [
+      { name: "Node.js", icon: "/icons/nodejs.svg" },
+      { name: "NestJS", icon: "/icons/nestjs.svg" },
       { name: "FastAPI", icon: "/icons/fastapi.svg" },
       { name: "Flask", icon: "/icons/flask-light.svg" },
       { name: "Django", icon: "/icons/django.svg" },
@@ -457,9 +462,9 @@ export const education: EducationEntry = {
 export const certifications: Certification[] = [
   {
     id: "certificate-one",
-    name: "[REPLACE] Certificate Name",
-    issuer: "[REPLACE] Issuing Organization",
-    date: "[REPLACE] 2026",
+    name: "e-Certification: Google Cloud",
+    issuer: "Google Cloud",
+    date: "2026",
     credentialUrl: "#",
   },
   {
