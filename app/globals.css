@@ -110,15 +110,6 @@ body::-webkit-scrollbar {
   }
 }
 
-/* The View Transition animates snapshots, so per-element colour transitions
-   would only make canvas-based text sample a half-faded palette. Keep colours
-   instant while the snapshots are taken. */
-html.theme-vt *,
-html.theme-vt *::before,
-html.theme-vt *::after {
-  transition-duration: 0s !important;
-}
-
 /* Fallback for browsers without View Transitions (and reduced motion). */
 html.theme-transition,
 html.theme-transition *,
@@ -127,6 +118,15 @@ html.theme-transition *::after {
   transition-property: background-color, color, border-color, fill, stroke !important;
   transition-duration: 400ms !important;
   transition-timing-function: ease !important;
+}
+
+/* Flicker fix: suppress only per-element colour transitions during view transition
+   snapshots, but allow the theme-reveal animation and any other non-colour transitions. */
+html.theme-vt *,
+html.theme-vt *::before,
+html.theme-vt *::after {
+  transition-property: color, background-color;
+  transition-duration: 0s !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
