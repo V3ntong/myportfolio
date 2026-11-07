@@ -13,7 +13,15 @@ import { TechStack } from "@/components/sections/TechStack";
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
+    <main className="relative min-h-screen bg-background text-foreground">
+  <style>{`
+    main::-webkit-scrollbar {
+      display: none;
+    }
+    main {
+      scrollbar-width: none;
+    }
+  `}</style>
       <PageBackground />
       <SidebarNav />
       <div className="relative z-10">
