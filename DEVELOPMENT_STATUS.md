@@ -350,3 +350,28 @@ Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, an
 | `Developer Portfolio Blueprint.docx` | Source planning guide (repo root) |
 | `myportfolio/build.log` | Previous build output (housekeeping) |
 | `myportfolio/cdp-*.mjs` | Debug scripts (housekeeping) |
+
+---
+
+## 12. Recent Progress (Nov 2026)
+
+### Halftone scroll reveal + scroll blur (restored)
+- HalftoneReveal.tsx: added optional scrollReveal prop with uScroll uniform and scroll-driven wipe.
+- Home.tsx: passed scrollReveal to the portrait HalftoneReveal.
+- ScrollBlur.tsx and HalftoneReveal.tsx: removed prefers-reduced-motion gating so blur/reveal work on reduced-motion machines.
+- Verified via CDP under prefers-reduced-motion: reduce.
+
+### 60-30-10 color theme
+- pp/globals.css: new tokens --navy/--cream/--coral plus --bg/--fg/--surface/--on-surface/--accent/--on-accent mapped in @theme inline (light + dark).
+- Replaced legacy hex/Tailwind colors across components and sections; canvas/WebGL visuals read computed styles.
+- SocialFlipButton, ContactForm, Projects accent buttons use 	ext-on-accent (navy on coral).
+
+### Animation regressions fixed
+- TextAnimation.tsx: restored initial="hidden" and removed reduced-motion zeroing so the floating word animation plays.
+- AnimatedContent.tsx: removed reduced-motion early-exit so container entrance animations play.
+
+### Issue fixes (minimal)
+- Home.tsx: restored TechText animation color to original #ededed (dark) / #171717 (light) text and #a855f7 / #7e22ce accent.
+- Home.tsx: removed scrollReveal prop so the hero photo reveals only on hover, never from scrolling.
+- Verified 
+ext build passes with no new warnings.
