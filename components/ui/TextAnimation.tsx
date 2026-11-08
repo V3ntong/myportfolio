@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { cn } from "cn";
 
 type TextAnimationProps = {
@@ -29,26 +29,21 @@ export function TextAnimation({
   className,
   itemClassName,
 }: TextAnimationProps) {
-  const reduceMotion = useReducedMotion();
   const units =
     mode === "char" ? text.split("") : text.split(/(\s+)/).filter(Boolean);
 
   return (
     <Component className={cn(display === "inline" ? "inline" : "inline-block", className)}>
       <motion.span
-        initial={false}
+        initial="hidden"
         whileInView="visible"
         viewport={{ once, amount: 0.3 }}
         variants={{
           hidden: {},
           visible: {
             transition: {
-              delayChildren: reduceMotion ? 0 : delay,
-              staggerChildren: reduceMotion
-                ? 0
-                : mode === "char"
-                  ? 0.018
-                  : 0.045,
+              delayChildren: delay,
+              staggerChildren: mode === "char" ? 0.018 : 0.045,
             },
           },
         }}
@@ -63,23 +58,17 @@ export function TextAnimation({
             <motion.span
               key={`${unit}-${index}`}
               variants={{
-                hidden: reduceMotion
-                  ? {
-                      opacity: 1,
-                      y: 0,
-                      filter: "blur(0px)",
-                    }
-                  : {
-                      opacity: 0,
-                      y: display === "inline" ? 0 : "0.35em",
-                      filter: "blur(4px)",
-                    },
+                hidden: {
+                  opacity: 0,
+                  y: display === "inline" ? 0 : "0.35em",
+                  filter: "blur(4px)",
+                },
                 visible: {
                   opacity: 1,
                   y: 0,
                   filter: "blur(0px)",
                   transition: {
-                    duration: reduceMotion ? 0 : duration,
+                    duration,
                     ease: EASE,
                   },
                 },

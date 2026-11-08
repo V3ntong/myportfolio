@@ -12,15 +12,6 @@ const DIRECTION_THRESHOLD = 4;
 
 export function ScrollBlur() {
   const [visible, setVisible] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduceMotion(query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -73,8 +64,6 @@ export function ScrollBlur() {
       window.removeEventListener("load", onLoad);
     };
   }, []);
-
-  if (reduceMotion) return null;
 
   return (
     <GradualBlur

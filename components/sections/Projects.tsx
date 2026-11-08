@@ -114,7 +114,7 @@ export function Projects() {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-[10px] font-semibold text-background transition-colors hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-[10px] font-semibold text-on-accent transition-colors hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                       >
                         <LiveIcon />
                         {labels.liveDemo}

@@ -31,6 +31,7 @@ export interface HalftoneRevealProps {
   wander?: boolean;
   clickBurst?: boolean;
   intro?: boolean;
+  scrollReveal?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -57,6 +58,7 @@ type Settings = {
   wander: boolean;
   clickBurst: boolean;
   intro: boolean;
+  scrollReveal: boolean;
 };
 
 type MaskTarget = { texture: WebGLTexture | null; framebuffer: WebGLFramebuffer | null; width: number; height: number };
@@ -122,6 +124,7 @@ uniform vec3 uMatte;
 uniform float uKey;
 uniform float uReverse;
 uniform float uIntro;
+uniform float uScroll;
 uniform vec4 uBursts[4];
 uniform float uBurstWidth;
 out vec4 outColor;
@@ -334,6 +337,8 @@ void main() {
 
   vec2 maskUv = vec2(p.x / uView.x, 1.0 - p.y / uView.y);
   float shown = max(texture(uMask, maskUv).r, burst(p));
+  float scrollEdge = mix(-0.3, 1.3, clamp(uScroll, 0.0, 1.0));
+  shown = max(shown, 1.0 - smoothstep(scrollEdge - 0.22, scrollEdge + 0.22, p.y / uView.y));
   shown = mix(shown, 1.0 - shown, uReverse);
   shown = shown * shown * (3.0 - 2.0 * shown);
   vec2 q = rotate(base) * p / uCell;
@@ -435,9 +440,9 @@ const HalftoneReveal = ({
   cellSize = 6,
   angle = 45,
   dotScale = 1,
-  inkColor = '#120f17',
-  accentColor = '#ff4f2a',
-  paperColor = '#ffffff',
+  inkColor = '#14213d',
+  accentColor = '#ff6b5b',
+  paperColor = '#f4ede0',
   contrast = 1.1,
   brightness = 0,
   invert = false,
@@ -450,6 +455,7 @@ const HalftoneReveal = ({
   wander = false,
   clickBurst = true,
   intro = true,
+  scrollReveal = false,
   className = '',
   style
 }: HalftoneRevealProps) => {
@@ -477,7 +483,8 @@ const HalftoneReveal = ({
     reverse,
     wander,
     clickBurst,
-    intro
+    intro,
+    scrollReveal
   };
   const settingsRef = useRef(settings);
 
@@ -537,6 +544,7 @@ const HalftoneReveal = ({
       'uKey',
       'uReverse',
       'uIntro',
+      'uScroll',
       'uBursts',
       'uBurstWidth'
     ]);
@@ -599,12 +607,23 @@ const HalftoneReveal = ({
       introStart: 0,
       presence: 0,
       drift: 0,
+      scroll: 0,
       trailUntil: 0
     };
     let raf = 0;
     let last = 0;
     let visible = true;
     let alive = true;
+
+    const readScroll = () => {
+      const s = settingsRef.current;
+      if (!s.scrollReveal) {
+        state.scroll = 0;
+        return;
+      }
+      const span = Math.max(window.innerHeight * 0.55, 1);
+      state.scroll = clamp(window.scrollY / span, 0, 1);
+    };
 
     const toRgb = (value: string): number[] => {
       const cached = colorCache.get(value);
@@ -650,6 +669,7 @@ const HalftoneReveal = ({
         pointer.x = width / 2;
         pointer.y = height / 2;
       }
+      readScroll();
       wake();
     };
 
@@ -709,6 +729,7 @@ const HalftoneReveal = ({
       gl.uniform1f(viewUniforms.uKey, state.key);
       gl.uniform1f(viewUniforms.uReverse, s.reverse ? 1 : 0);
       gl.uniform1f(viewUniforms.uIntro, 1 - (1 - intro) * (1 - intro));
+      gl.uniform1f(viewUniforms.uScroll, s.scrollReveal ? state.scroll : 0);
       gl.uniform4fv(viewUniforms.uBursts, burstData);
       gl.uniform1f(viewUniforms.uBurstWidth, Math.max(60, s.revealRadius * 0.9));
       gl.clearColor(0, 0, 0, 0);
@@ -833,6 +854,12 @@ const HalftoneReveal = ({
       last = 0;
       wake();
     };
+    const onScroll = () => {
+      if (!settingsRef.current.scrollReveal) return;
+      readScroll();
+      last = 0;
+      wake();
+    };
 
     container.addEventListener('pointermove', onMove, { passive: true });
     container.addEventListener('pointerenter', onMove, { passive: true });
@@ -840,6 +867,7 @@ const HalftoneReveal = ({
     container.addEventListener('pointerleave', onLeave, { passive: true });
     container.addEventListener('pointercancel', onLeave, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('scroll', onScroll, { passive: true });
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
     const intersection = new IntersectionObserver(entries => {
@@ -872,6 +900,7 @@ const HalftoneReveal = ({
       container.removeEventListener('pointerleave', onLeave);
       container.removeEventListener('pointercancel', onLeave);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('scroll', onScroll);
       masks.forEach(destroyMask);
       gl.deleteTexture(imageTexture);
       gl.deleteBuffer(buffer);

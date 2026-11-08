@@ -4,37 +4,61 @@
 
 :root {
   color-scheme: light;
-  --background: #fafafa;
-  --foreground: #171717;
-  --muted-foreground: #52525b;
-  --sidebar-text: #3f3f46;
-  --sidebar-marker: #a1a1aa;
-  --accent: #7e22ce;
-  --border: #e4e4e7;
+  --navy: #14213d;
+  --cream: #f4ede0;
+  --coral: #ff6b5b;
+  --bg: var(--cream);
+  --fg: var(--navy);
+  --surface: var(--navy);
+  --on-surface: var(--cream);
+  --accent: var(--coral);
+  --on-accent: var(--navy);
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --muted-foreground: color-mix(in srgb, var(--fg) 58%, var(--bg));
+  --sidebar-text: color-mix(in srgb, var(--fg) 78%, var(--bg));
+  --sidebar-marker: color-mix(in srgb, var(--fg) 32%, var(--bg));
+  --border: color-mix(in srgb, var(--fg) 16%, var(--bg));
   --overlay: rgb(0 0 0 / 0.55);
   --sidebar-width: 18rem;
 }
 
 .dark {
   color-scheme: dark;
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --muted-foreground: #a1a1aa;
-  --sidebar-text: #c4c4c4;
-  --sidebar-marker: #6c6c6c;
-  --accent: #a855f7;
-  --border: #27272a;
+  --navy: #14213d;
+  --cream: #f4ede0;
+  --coral: #ff6b5b;
+  --bg: var(--navy);
+  --fg: var(--cream);
+  --surface: color-mix(in srgb, var(--cream) 8%, var(--navy));
+  --on-surface: var(--cream);
+  --accent: var(--coral);
+  --on-accent: var(--navy);
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --muted-foreground: color-mix(in srgb, var(--fg) 62%, var(--bg));
+  --sidebar-text: color-mix(in srgb, var(--fg) 82%, var(--bg));
+  --sidebar-marker: color-mix(in srgb, var(--fg) 34%, var(--bg));
+  --border: color-mix(in srgb, var(--fg) 18%, var(--bg));
   --overlay: rgb(0 0 0 / 0.65);
   --sidebar-width: 18rem;
 }
 
 @theme inline {
+  --color-navy: var(--navy);
+  --color-cream: var(--cream);
+  --color-coral: var(--coral);
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted-foreground: var(--muted-foreground);
   --color-sidebar-text: var(--sidebar-text);
   --color-sidebar-marker: var(--sidebar-marker);
-  --color-accent: var(--accent);
   --color-border: var(--border);
   --color-overlay: var(--overlay);
   --font-sans: var(--font-geist-sans);
@@ -69,7 +93,7 @@ body::-webkit-scrollbar {
 }
 
 @layer base {
-  *,
+  * ,
   ::before,
   ::after {
     border-color: var(--border);
@@ -86,6 +110,7 @@ body::-webkit-scrollbar {
     background-color: var(--background);
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
+    transition: background-color 200ms ease, color 200ms ease;
   }
 }
 
@@ -112,7 +137,7 @@ body::-webkit-scrollbar {
 
 /* Fallback for browsers without View Transitions (and reduced motion). */
 html.theme-transition,
-html.theme-transition *,
+html.theme-transition * ,
 html.theme-transition *::before,
 html.theme-transition *::after {
   transition-property: background-color, color, border-color, fill, stroke !important;
@@ -122,7 +147,7 @@ html.theme-transition *::after {
 
 /* Flicker fix: suppress only per-element colour transitions during view transition
    snapshots, but allow the theme-reveal animation and any other non-colour transitions. */
-html.theme-vt *,
+html.theme-vt * ,
 html.theme-vt *::before,
 html.theme-vt *::after {
   transition-property: color, background-color;

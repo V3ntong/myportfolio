@@ -97,7 +97,7 @@ export function SocialFlipButton({
                   className={cn(
                     "absolute inset-0 flex items-center justify-center rounded-xl border [backface-visibility:hidden] [transform:rotateY(180deg)]",
                     backClassName ??
-                      "border-accent bg-accent text-white shadow-[0_10px_30px_-14px_var(--accent)]",
+                      "border-accent bg-accent text-on-accent shadow-[0_10px_30px_-14px_var(--accent)]",
                   )}
                 >
                   <Icon aria-hidden="true" className="size-4" />

@@ -20,7 +20,7 @@ export function Home() {
     getServerSnapshot,
   );
   const isDark = resolvedTheme === "dark";
-  const accent = isDark ? "#a855f7" : "#7e22ce";
+  const accent = "#ff6b5b";
 
   return (
     <section
@@ -47,7 +47,7 @@ export function Home() {
               fontWeight={700}
               fontSize={88}
               color={isDark ? "#ededed" : "#171717"}
-              accentColor={accent}
+              accentColor={isDark ? "#a855f7" : "#7e22ce"}
               fontFamily="Arial, Helvetica, sans-serif"
               reveal="letter"
               specks={8}
@@ -97,9 +97,9 @@ export function Home() {
                   revealRadius={45}
                   wander={false}
                   clickBurst={false}
-                  inkColor={isDark ? "#ededed" : "#171717"}
-                  paperColor={isDark ? "#0a0a0a" : "#fafafa"}
-                  accentColor={accent}
+                  inkColor={isDark ? "#f4ede0" : "#14213d"}
+                  paperColor={isDark ? "#14213d" : "#f4ede0"}
+                  accentColor="#ff6b5b"
                 />
               )}
             </div>

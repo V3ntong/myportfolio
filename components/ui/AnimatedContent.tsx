@@ -95,8 +95,6 @@ const AnimatedContent = ({
     let scroller: Element | string | null = container || document.getElementById('snap-main-container') || null;
     if (typeof scroller === 'string') scroller = document.querySelector(scroller);
 
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-
     const ctx = gsap.context(() => {
       const targets: Element[] = stagger > 0 && el.children.length ? Array.from(el.children) : [el];
       const horizontal = direction === 'horizontal';
@@ -105,11 +103,6 @@ const AnimatedContent = ({
       const mask = WIPES[wipe];
 
       gsap.set(el, { visibility: 'visible' });
-
-      if (reduce) {
-        callbacksRef.current.onComplete?.();
-        return;
-      }
 
       const from: gsap.TweenVars = {
         [axis]: distance * sign,
