@@ -20,7 +20,11 @@ export function Home() {
     getServerSnapshot,
   );
   const isDark = resolvedTheme === "dark";
+<<<<<<< HEAD
   const accent = "#a855f7";
+=======
+  const accent = "#ff6b5b";
+>>>>>>> 69d7b2e (asdasda)
 
   return (
     <section
@@ -97,9 +101,15 @@ export function Home() {
                   revealRadius={45}
                   wander={false}
                   clickBurst={false}
+<<<<<<< HEAD
 inkColor={isDark ? "#ededed" : "#171717"}
                 paperColor={isDark ? "#0a0a0a" : "#fafafa"}
                 accentColor={isDark ? "#a855f7" : "#7e22ce"}
+=======
+                  inkColor={isDark ? "#f4ede0" : "#14213d"}
+                  paperColor={isDark ? "#14213d" : "#f4ede0"}
+                  accentColor="#ff6b5b"
+>>>>>>> 69d7b2e (asdasda)
                 />
               )}
             </div>

@@ -362,6 +362,7 @@ Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, an
 - Verified via CDP under prefers-reduced-motion: reduce.
 
 ### 60-30-10 color theme
+<<<<<<< HEAD
 - The navy/cream/coral 60-30-10 theme has been removed. The former palette is restored:
   **Dark mode:** `--background: #0a0a0a`, `--foreground: #ededed`, `--muted-foreground: #a1a1aa`, `--accent: #a855f7` (purple).
   **Light mode:** `--background: #fafafa`, `--foreground: #171717`, `--muted-foreground: #52525b`, `--accent: #7e22ce` (purple).
@@ -369,6 +370,11 @@ Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, an
 - All components that previously used the navy/cream/coral palette now read these tokens from the root; no per-component color overrides remain.
 - Canvas/WebGL visuals (GlyphBackground, HalftoneReveal) read computed styles and update immediately on theme toggle.
 - SocialFlipButton, ContactForm, and Projects accent buttons now use `var(--on-accent)` (purple text on contrasting background) without hard-coded navy/coral.
+=======
+- pp/globals.css: new tokens --navy/--cream/--coral plus --bg/--fg/--surface/--on-surface/--accent/--on-accent mapped in @theme inline (light + dark).
+- Replaced legacy hex/Tailwind colors across components and sections; canvas/WebGL visuals read computed styles.
+- SocialFlipButton, ContactForm, Projects accent buttons use 	ext-on-accent (navy on coral).
+>>>>>>> 69d7b2e (asdasda)
 
 ### Animation regressions fixed
 - TextAnimation.tsx: restored initial="hidden" and removed reduced-motion zeroing so the floating word animation plays.
