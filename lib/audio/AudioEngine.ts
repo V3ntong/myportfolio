@@ -98,9 +98,11 @@ export class AudioEngine {
   private element: HTMLAudioElement | null = null;
   private reactiveElement: HTMLAudioElement | null = null;
   private plainElement: HTMLAudioElement | null = null;
+private reactiveElementSource: MediaElementAudioSourceNode | null = null;
+  private plainElementSource: MediaElementAudioSourceNode | null = null;
   private elementSource: MediaElementAudioSourceNode | null = null;
-  private micStream: MediaStream | null = null;
   private micSource: MediaStreamAudioSourceNode | null = null;
+  private micStream: MediaStream | null = null;
   private objectUrl: string | null = null;
 
   private freqData = new Uint8Array(FFT_SIZE / 2);
@@ -206,7 +208,7 @@ export class AudioEngine {
   }
 
   private ensureElement(): HTMLAudioElement {
-    if (this.element) return this.element;
+    if (this.reactiveElement) return this.reactiveElement;
 
     const element = new Audio();
     element.preload = "metadata";
@@ -218,7 +220,7 @@ export class AudioEngine {
       }
     });
     element.addEventListener("error", () => {
-      // CORS failure - switch to plain element fallback
+      // CORS failure for cross-origin media that lacks CORS headers
       if (this.reactiveElement === element) {
         this.switchToPlainElement();
       } else {
@@ -251,43 +253,64 @@ export class AudioEngine {
   }
 
   private switchToPlainElement(): void {
-    // Detach reactive element from analyser/graph
-    if (this.reactiveElement && this.elementSource) {
-      // The elementSource was created by ensureElementSource reactive path
-      // We need to disconnect it
-      try {
-        this.elementSource?.disconnect();
-      } catch {
-        // ignore
-      }
-      this.elementSource = null;
-    }
+    // Detach reactive element source from analyser/gain
+    this.reactiveElementSource?.disconnect();
+    this.reactiveElementSource = null;
+
     // Switch src to plain element (no crossOrigin, no Web Audio connection)
     this.plainElement?.removeAttribute("crossOrigin");
     this.plainElement?.pause();
-    this.plainElement?.currentTime = 0;
+    if (this.plainElement) this.plainElement.currentTime = 0;
     this.element = this.plainElement;
-    this.elementSource = null; // no analyser connection
-    this._source = this._source === "audius" ? "audius" : "track";
     // Reset analysis since we're no longer receiving analyser data
     this.resetAnalysis();
   }
 
-  private ensureElementSource(element: HTMLAudioElement): MediaElementAudioSourceNode {
+  private createElementSource(element: HTMLAudioElement): MediaElementAudioSourceNode {
     const ctx = this.ensureContext();
-    if (!this.elementSource) {
-      const analyser = this.analyser;
-      const gain = this.gain;
-      if (!analyser || !gain) {
-        throw new Error("Audio graph is not ready.");
-      }
-      const source = ctx.createMediaElementSource(element);
-      // Analysis branch (leaf) and audible branch are independent.
-      source.connect(analyser);
-      source.connect(gain);
-      this.elementSource = source;
+    const analyser = this.analyser;
+    const gain = this.gain;
+    if (!analyser || !gain) {
+      throw new Error("Audio graph is not ready.");
     }
-    return this.elementSource;
+    const source = ctx.createMediaElementSource(element);
+    // Connect to analyser only for reactive element; plain element is analysis-leaf only
+    if (element === this.reactiveElement) {
+      source.connect(analyser);
+      this.reactiveElementSource = source;
+    } else {
+      this.plainElementSource = source;
+    }
+    source.connect(gain);
+    return source;
+  }
+
+  private startSilenceDetection(): void {
+    // If after ~1.5s of playback the analyser returns all zeros while currentTime advances,
+    // switch to plain element so the track is still audible.
+    let checkTimeout: NodeJS.Timeout;
+    const check = () => {
+      if (!this.element || !this._isPlaying) {
+        clearTimeout(checkTimeout);
+        return;
+      }
+      const analyser = this.analyser;
+      if (!analyser) {
+        clearTimeout(checkTimeout);
+        return;
+      }
+      analyser.getByteFrequencyData(this.freqData);
+      const allZeros = this.freqData.every((b) => b === 0);
+      if (allZeros) {
+        // Still playing and analyser shows silence → switch to plain element
+        clearTimeout(checkTimeout);
+        this.switchToPlainElement();
+      } else {
+        // Check again in 1.5s
+        checkTimeout = setTimeout(check, 1500);
+      }
+    };
+    checkTimeout = setTimeout(check, 1500);
   }
 
   private revokeObjectUrl(): void {
@@ -367,29 +390,69 @@ export class AudioEngine {
     }
 
     this.teardownMic();
-    const element = this.ensureElement();
-    this.ensureElementSource(element);
-
-    if (this._source === "file" || this._source === "track") {
-      element.pause();
-    }
     this.revokeObjectUrl();
 
-    try {
-      if (input.type === "file") {
-        this.objectUrl = URL.createObjectURL(input.file);
-        element.src = this.objectUrl;
-        this._source = "file";
-      } else {
-        element.src = input.src;
-        this._source = "track";
-      }
+    // Handle YouTube source - don't use audio elements, just set the type
+    if (input.type === "youtube") {
+      this._source = "youtube";
+      this.element = null;
+      this.reactiveElement = null;
+      this.plainElement = null;
+      this.elementSource = null;
+      this.reactiveElementSource = null;
+      this.plainElementSource = null;
+      this.resetAnalysis();
+      this.setPlaying(true);
+      return;
+    }
+
+    // Handle Audius source - try with crossOrigin="anonymous" reactive element first
+    if (input.type === "audius") {
+      const element = this.ensureElement();
+      // Set CORS-enabled element src
+      element.src = input.src;
       element.load();
       this.resetAnalysis();
       this.setPlaying(false);
-    } catch {
-      throw new Error("That audio source could not be loaded.");
+
+      // Start silence detection fallback
+      this.startSilenceDetection();
+
+      // Add CORS error listener - if crossOrigin fails, switch to plain element
+      element.addEventListener("error", () => {
+        this.switchToPlainElement();
+      });
+
+      this.element = element;
+      return;
     }
+
+    // Handle track/file source - try with crossOrigin="anonymous" reactive element first
+    const element = this.ensureElement();
+
+    if (input.type === "file") {
+      this.objectUrl = URL.createObjectURL(input.file);
+      element.src = this.objectUrl;
+      this._source = "file";
+    } else {
+      element.src = input.src;
+      this._source = "track";
+    }
+
+    // Start silence detection - if after ~1.5s of playback the analyser returns all zeros
+    // while currentTime advances, switch to plain element so the track is still audible.
+    this.startSilenceDetection();
+
+    // Add CORS error listener - if crossOrigin fails, switch to plain element
+    element.addEventListener("error", () => {
+      this.switchToPlainElement();
+    });
+
+    element.load();
+    this.resetAnalysis();
+    this.setPlaying(false);
+
+    this.element = element;
   }
 
   async play(): Promise<void> {
@@ -519,13 +582,19 @@ export class AudioEngine {
     this.teardownMic();
     this.revokeObjectUrl();
 
-    this.elementSource?.disconnect();
+    this.reactiveElementSource?.disconnect();
+    this.reactiveElementSource = null;
+    this.plainElementSource?.disconnect();
+    this.plainElementSource = null;
+
     this.elementSource = null;
     this.gain?.disconnect();
     this.gain = null;
     this.analyser?.disconnect();
     this.analyser = null;
     this.element = null;
+    this.reactiveElement = null;
+    this.plainElement = null;
     this._source = "none";
 
     const ctx = this.ctx;
