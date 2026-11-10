@@ -11,8 +11,8 @@ export function PageBackground() {
   return (
     <GlyphBackground
       className="fixed inset-0 z-0"
-      glowColor={isDark ? "#f4ede0" : "#14213d"}
-      shapeColor="#ff6b5b"
+      glowColor={isDark ? "#0a0a0a" : "#fafafa"}
+      shapeColor={isDark ? "#a855f7" : "#7e22ce"}
       haze={isDark ? 0.1 : 0.18}
       hoverInk={isDark ? 0.3 : 0.45}
     />
