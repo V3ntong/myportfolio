@@ -362,9 +362,13 @@ Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, an
 - Verified via CDP under prefers-reduced-motion: reduce.
 
 ### 60-30-10 color theme
-- pp/globals.css: new tokens --navy/--cream/--coral plus --bg/--fg/--surface/--on-surface/--accent/--on-accent mapped in @theme inline (light + dark).
-- Replaced legacy hex/Tailwind colors across components and sections; canvas/WebGL visuals read computed styles.
-- SocialFlipButton, ContactForm, Projects accent buttons use 	ext-on-accent (navy on coral).
+- The navy/cream/coral 60-30-10 theme has been removed. The former palette is restored:
+  **Dark mode:** `--background: #0a0a0a`, `--foreground: #ededed`, `--muted-foreground: #a1a1aa`, `--accent: #a855f7` (purple).
+  **Light mode:** `--background: #fafafa`, `--foreground: #171717`, `--muted-foreground: #52525b`, `--accent: #7e22ce` (purple).
+- These tokens live in `app/globals.css` under the `:root` (light) and `.dark` (dark) blocks, and are also available via the `@theme` inline config as `--color-background`, `--color-foreground`, `--color-muted-foreground`, `--color-accent`, etc.
+- All components that previously used the navy/cream/coral palette now read these tokens from the root; no per-component color overrides remain.
+- Canvas/WebGL visuals (GlyphBackground, HalftoneReveal) read computed styles and update immediately on theme toggle.
+- SocialFlipButton, ContactForm, and Projects accent buttons now use `var(--on-accent)` (purple text on contrasting background) without hard-coded navy/coral.
 
 ### Animation regressions fixed
 - TextAnimation.tsx: restored initial="hidden" and removed reduced-motion zeroing so the floating word animation plays.
