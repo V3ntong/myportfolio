@@ -385,3 +385,8 @@ Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, an
 - Home.tsx: removed scrollReveal prop so the hero photo reveals only on hover, never from scrolling.
 - Verified 
 ext build passes with no new warnings.
+
+
+
+
+next is heheheh
