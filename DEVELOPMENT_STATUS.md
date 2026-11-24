@@ -386,3 +386,25 @@ Manual browser checks (headless Chrome via CDP) at `1920×1080`, `1536×864`, an
 - Verified 
 ext build passes with no new warnings.
 
+
+das
+das
+das
+da
+sd
+asd
+as
+das
+d
+asd
+das
+das
+
+asd
+asd
+asd
+a
+s
+dwa
+s
+d
